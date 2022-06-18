@@ -16,7 +16,11 @@ ul{
     max-width: 80%;
 }
 
-
+.logo{
+    display: block;
+    margin: auto;
+    max-width: 20rem;
+}
 
 .texto{
     color: #fff;
@@ -123,6 +127,21 @@ ul{
         width: 95%;
     }
 
+}
+
+.puntuacion-contenedor{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.puntuaciones{
+    font-size: 17px;
+    color: rgb(206, 206, 206);
+    margin: 0 1rem;
+    font-weight: 700;
 }
 
 

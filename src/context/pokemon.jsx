@@ -11,7 +11,9 @@ const PokemonProvider = ({children}) => {
     const [loading,setLoading] = useState(true);
     const [error,setError] = useState(null);
     const [correcto,setCorrecto] = useState(false);
-    const [msg, setMsg] = useState('Quien es ese pokemon?');
+    const [msg, setMsg] = useState('¿Quien es ese pokemon?');
+    const [puntuacion, setPuntuacion] = useState(0);
+    const [puntuacionMaxima, setPuntuacionMaxima] = useState(0);
     
     const genId = () => {
 
@@ -59,13 +61,26 @@ const PokemonProvider = ({children}) => {
     }
 
     const newGame = ()=>{
+
+        const puntiacionLocalStorage = localStorage.getItem('puntuacion');
+        const puntiacionMaximaLocalStorage = localStorage.getItem('puntuacionMaxima');
+
+        if(puntiacionLocalStorage){
+            setPuntuacion(Number(puntiacionLocalStorage));
+        }
+        if(puntiacionMaximaLocalStorage){
+            setPuntuacionMaxima(Number(puntiacionMaximaLocalStorage));
+        }else if(!puntiacionMaximaLocalStorage && puntiacionLocalStorage){
+            setPuntuacionMaxima(Number(puntiacionLocalStorage));
+        }
+
         setPokemons([]);
         setPokemon(null);
         setImagen(null);
         setLoading(true);
         setError(false);
         setCorrecto(false);
-        setMsg('Quien es ese pokemon?');
+        setMsg('¿Quien es ese pokemon?');
 
         getPokemons(mixPokemons());
     }
@@ -73,24 +88,36 @@ const PokemonProvider = ({children}) => {
     const responder = (respuesta) => {
         if(respuesta.id == pokemon){
             setMsg(`Correcto es ${respuesta.name}`);
+            
+            localStorage.setItem('puntuacion',Number(puntuacion) + 1);
+            setPuntuacion(Number(puntuacion) + 1);
+
+            if(puntuacion >= puntuacionMaxima){
+                localStorage.setItem('puntuacionMaxima',Number(puntuacion)+1);
+                setPuntuacionMaxima(Number(puntuacion)+1);
+            }
+
+
             setCorrecto(true);
             setTimeout(()=>{
                 newGame();
-            },2000);
+            },900);
             
         }else{
             const correcto = pokemons.find(p => p.id == pokemon);
             setMsg(`Incorrecto es ${correcto.name}`);
+            setPuntuacion(0);
+            localStorage.setItem('puntuacion',0);
             setCorrecto(true);
             setError(true);
             setTimeout(()=>{
                 newGame();
-            },2000);
+            },900);
         }
     }
     
     useEffect(() => {
-        
+
         newGame()
         
     },[]);
@@ -108,7 +135,9 @@ const PokemonProvider = ({children}) => {
             responder,
             pokemons,
             correcto,
-            msg
+            msg,
+            puntuacion,
+            puntuacionMaxima
         }}>
             {children}
         </PokemonContext.Provider>
