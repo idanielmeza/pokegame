@@ -87,7 +87,7 @@ const PokemonProvider = ({children}) => {
 
     const responder = (respuesta) => {
         if(respuesta.id == pokemon){
-            setMsg(`Correcto es ${respuesta.name}`);
+            setMsg(`¡Correcto! el pokemon es ${respuesta.name}`);
             
             localStorage.setItem('puntuacion',Number(puntuacion) + 1);
             setPuntuacion(Number(puntuacion) + 1);
@@ -105,7 +105,7 @@ const PokemonProvider = ({children}) => {
             
         }else{
             const correcto = pokemons.find(p => p.id == pokemon);
-            setMsg(`Incorrecto es ${correcto.name}`);
+            setMsg(`¡Incorrecto! el pokemon es ${correcto.name}`);
             setPuntuacion(0);
             localStorage.setItem('puntuacion',0);
             setCorrecto(true);
